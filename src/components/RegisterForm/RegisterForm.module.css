@@ -10,12 +10,12 @@
 .form::after {
   content: "";
   position: absolute;
-  bottom: -20px;
+  bottom: -50px;
   left: 50%;
   transform: translateX(-50%);
   width: 100vw;
   height: 1px;
-  background-color: #000dff96;
+  background-color: #549677;
 }
 
 .wrpap {
@@ -39,7 +39,7 @@
 }
 
 .input:focus {
-  border-color: #000dff96;
+  border-color: #549677;
 }
 
 .label {
@@ -60,7 +60,7 @@
 .input:not(:placeholder-shown) + .label {
   top: 0;
   left: 8px;
-  color: #000dff96;
+  color: #549677;
   font-size: 14px;
 }
 
