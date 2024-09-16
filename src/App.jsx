@@ -1,20 +1,19 @@
-import { lazy, Suspense, useEffect } from "react";
-import { Route, Routes } from "react-router-dom";
-import Loader from "./components/Loader/Loader";
+import { useEffect, lazy } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { refreshUser } from "./redux/auth/operations";
-import { selectIsRefreshingAuth } from "./redux/auth/selectors";
+import { Route, Routes } from "react-router-dom";
 import RestrictedRoute from "./RestrictedRoute";
 import PrivateRoute from "./PrivateRoute";
+import Layout from "./components/Layout/Layout";
+import { selectIsRefreshingAuth } from "./redux/auth/selectors";
+import { refreshUser } from "./redux/auth/operations";
 
-const Layout = lazy(() => import("./components/Layout/Layout"));
 const HomePage = lazy(() => import("./pages/HomePage"));
-const ContactsPage = lazy(() => import("./pages/ContactsPage"));
-const RegisterPage = lazy(() => import("./pages/RegisterPage"));
+const RegistrationPage = lazy(() => import("./pages/RegisterPage"));
 const LoginPage = lazy(() => import("./pages/LoginPage"));
+const ContactsPage = lazy(() => import("./pages/ContactsPage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 
-export default function App() {
+const App = () => {
   const dispatch = useDispatch();
   const isRefreshing = useSelector(selectIsRefreshingAuth);
 
@@ -23,27 +22,18 @@ export default function App() {
   }, [dispatch]);
 
   return isRefreshing ? (
-    <Loader />
+    <div>Refreshing user please wait...</div>
   ) : (
-    <Suspense fallback={<Loader />}>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<HomePage />} />
-          <Route
-            path="/contacts"
-            element={
-              <PrivateRoute
-                component={<ContactsPage />}
-                redirectTo={"/login"}
-              />
-            }
-          />
+    <div>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
           <Route
             path="/register"
             element={
               <RestrictedRoute
-                component={<RegisterPage />}
-                redirectTo={"/contacts"}
+                component={<RegistrationPage />}
+                redirectTo="/contacts"
               />
             }
           />
@@ -52,13 +42,21 @@ export default function App() {
             element={
               <RestrictedRoute
                 component={<LoginPage />}
-                redirectTo={"/contacts"}
+                redirectTo="/contacts"
               />
             }
           />
+          <Route
+            path="/contacts"
+            element={
+              <PrivateRoute component={<ContactsPage />} redirectTo="/login" />
+            }
+          />
           <Route path="*" element={<NotFoundPage />} />
-        </Route>
-      </Routes>
-    </Suspense>
+        </Routes>
+      </Layout>
+    </div>
   );
-}
+};
+
+export default App;
