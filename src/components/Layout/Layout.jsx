@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import Loader from "../Loader/Loader";
 import AppBar from "../AppBar/AppBar";
 
 const Layout = ({ children }) => {
@@ -6,7 +7,7 @@ const Layout = ({ children }) => {
     <>
       <AppBar />
       <main>
-        <Suspense fallback={<div>Loading page...</div>}>{children}</Suspense>
+        <Suspense fallback={<Loader />}>{children}</Suspense>
       </main>
     </>
   );
